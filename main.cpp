@@ -29,7 +29,13 @@ int main(int argc, char* argv[]) {
             argv[i] = argv[i + 1];
         }
 
-        int null_file = open("/dev/null", O_RDWR);
+        int null_file;
+        if ((null_file = open("/dev/null", O_RDWR)) == -1) {
+            int error = errno;
+            write(pipe_fds[1], &error, sizeof(int));
+            close(pipe_fds[1]);
+            return EXIT_FAILURE;
+        }
         dup2(null_file, STDOUT_FILENO);
         dup2(null_file, STDERR_FILENO);
         dup2(null_file, STDIN_FILENO);
