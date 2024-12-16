@@ -5,4 +5,4 @@ artifact = "obj"
 install = "/usr/local/bin"
 
 [options]
-compilation-flags = "-Wall -O2"
+compilation-flags = "-Wall -Wno-unused-result -O2"

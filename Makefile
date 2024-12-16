@@ -11,7 +11,7 @@ ifeq ($(OS),Windows_NT)
 endif
 
 compiler := $(CXX)
-compilation_flags := -Wall -O2
+compilation_flags := -Wall -Wno-unused-result -O2
 libraries :=
 
 default: gtfo$(out_ext)

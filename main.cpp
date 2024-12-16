@@ -11,16 +11,24 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    pid_t result;
-    if ((result = fork()) == -1) {
+    int pipe_fds[2];
+    if (pipe(pipe_fds) == -1) {
         std::cerr << "Error: " << strerror(errno) << std::endl;
         return EXIT_FAILURE;
-    } else if (!result) {
+    }
+
+    pid_t pid;
+    if ((pid = fork()) == -1) {
+        std::cerr << "Error: " << strerror(errno) << std::endl;
+        return EXIT_FAILURE;
+    } else if (!pid) {
+        close(pipe_fds[0]); // Close unused read end
+        fcntl(pipe_fds[1], F_SETFD, FD_CLOEXEC);
+
         for (int i = 0; i < argc; ++i) {
             argv[i] = argv[i + 1];
         }
 
-        int stderr_fd = fcntl(STDERR_FILENO, F_DUPFD_CLOEXEC, 3); // Save stderr
         int null_file = open("/dev/null", O_RDWR);
         dup2(null_file, STDOUT_FILENO);
         dup2(null_file, STDERR_FILENO);
@@ -28,13 +36,22 @@ int main(int argc, char* argv[]) {
         close(null_file);
 
         if (execvp(argv[0], argv) == -1) {
-            dup2(stderr_fd, STDERR_FILENO); // Restore stderr
-            close(stderr_fd);
-
-            std::cerr << "Error: " << strerror(errno) << std::endl;
+            int error = errno;
+            write(pipe_fds[1], &error, sizeof(int));
+            close(pipe_fds[1]);
             return EXIT_FAILURE;
         }
     }
 
+    close(pipe_fds[1]); // Close unused write end
+
+    int error;
+    if (read(pipe_fds[0], &error, sizeof(int)) == sizeof(int)) {
+        std::cerr << "Error: " << strerror(error) << std::endl;
+        close(pipe_fds[0]);
+        return EXIT_FAILURE;
+    }
+
+    close(pipe_fds[0]);
     return EXIT_SUCCESS;
 }
