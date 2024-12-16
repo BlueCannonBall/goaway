@@ -1,0 +1,8 @@
+[paths]
+output = "gtfo"
+source = ["."]
+artifact = "obj"
+install = "/usr/local/bin"
+
+[options]
+compilation-flags = "-Wall -O2"
