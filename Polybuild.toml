@@ -1,5 +1,5 @@
 [paths]
-output = "gtfo"
+output = "goaway"
 source = ["."]
 artifact = "obj"
 install = "/usr/local/bin"
