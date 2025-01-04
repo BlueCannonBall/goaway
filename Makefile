@@ -14,7 +14,7 @@ compiler := $(CXX)
 compilation_flags := -Wall -Wno-unused-result -O2
 libraries :=
 
-default: gtfo$(out_ext)
+default: goaway$(out_ext)
 .PHONY: default
 
 obj/main_0$(obj_ext): ./main.cpp
@@ -23,19 +23,19 @@ obj/main_0$(obj_ext): ./main.cpp
 	@$(compiler) -c $< $(compilation_flags) -o $@
 	@printf '\033[1m[POLYBUILD]\033[0m Finished compiling $@ from $<!\n'
 
-gtfo$(out_ext): obj/main_0$(obj_ext)
+goaway$(out_ext): obj/main_0$(obj_ext)
 	@printf '\033[1m[POLYBUILD]\033[0m Building $@...\n'
 	@$(compiler) $^ $(static_libraries) $(compilation_flags) $(libraries) -o $@
 	@printf '\033[1m[POLYBUILD]\033[0m Finished building $@!\n'
 
 clean:
-	@printf '\033[1m[POLYBUILD]\033[0m Deleting gtfo$(out_ext) and obj...\n'
-	@rm -rf gtfo$(out_ext) obj
-	@printf '\033[1m[POLYBUILD]\033[0m Finished deleting gtfo$(out_ext) and obj!\n'
+	@printf '\033[1m[POLYBUILD]\033[0m Deleting goaway$(out_ext) and obj...\n'
+	@rm -rf goaway$(out_ext) obj
+	@printf '\033[1m[POLYBUILD]\033[0m Finished deleting goaway$(out_ext) and obj!\n'
 .PHONY: clean
 
 install:
-	@printf '\033[1m[POLYBUILD]\033[0m Copying gtfo$(out_ext) to /usr/local/bin...\n'
-	@cp gtfo$(out_ext) /usr/local/bin
-	@printf '\033[1m[POLYBUILD]\033[0m Finished copying gtfo to /usr/local/bin!\n'
+	@printf '\033[1m[POLYBUILD]\033[0m Copying goaway$(out_ext) to /usr/local/bin...\n'
+	@cp goaway$(out_ext) /usr/local/bin
+	@printf '\033[1m[POLYBUILD]\033[0m Finished copying goaway to /usr/local/bin!\n'
 .PHONY: install
