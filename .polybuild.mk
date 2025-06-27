@@ -26,7 +26,7 @@ ifeq ($(OS),Windows_NT)
 endif
 
 compiler := $(CXX)
-compilation_flags := -Wall -Wno-unused-result -O2 $(dynamic_flag)
+compilation_flags := -Wall -Wno-unused-result -std=c++14 -O2 $(dynamic_flag)
 link_time_flags := $(LDFLAGS)
 libraries :=
 prefix := /usr/local/bin
